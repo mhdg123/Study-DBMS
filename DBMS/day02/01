@@ -1,0 +1,55 @@
+단축키가 거의 이클립스와 비슷함 
+-- Lower case: CTRL+SHIFT+Y
+-- Upper case: CTRL+SHIFT+X
+
+  
+-- SELECT - 데이터 조회/질의
+-- SELECT [컬럼명 또는 표현식] FROM [테이블명, 뷰명]
+
+-- '모든 컬럼' 조회 : * 사용
+
+  SELECT 옆에 원하는 컬럼명만 넣을 수도 있고 컬럼명 우측에 별명을 넣어주면 그 별명으로 적용되어 있다 
+  대신 별명은 띄어쓰기를 허용하지 않으므로 띄어쓰기를 할거면 ""로 묶어주고 컬럼명 AS 별명 해도 된다 
+
+  SELECT DISTINCT 컬럼명 FROM 테이블명 
+  => DISTINCT는 중복된값은 빼고 보여줌 
+
+  문자열 연결은 CONCAT()을 활용한다
+  컬럼명을 묶어서 보고 싶다면 
+  SELECT CONCAT(컬럼명, 컬럼명) FROM 테이블명
+  이렇게 작성시에 컬럼명끼리 붙여서 조회됨 
+
+  WHERE은 원하는 조건만 검색 가능하게 해줌 
+
+  SELECT 컬럼명 FROM 테이블명 WHERE 조건식
+
+  *MySQL 은 대소문자 구분 없이 비교 (디폴트)*
+
+  -- 직원 테이블(t_emp) 에서 직책(job) 이 salesman 인 사람만 조회 
+  SLELECT * FROM t_emp WHERE job='salesman'
+
+  -- 학생 테이블(t_student) 에서
+-- 2,3 학년(grade) 학생의  이름(name), 학년(grade) 출력
+
+  select name, grade from t_student where grade=2 or grade=3
+  select name, grade from t_student where grade in(2,3) //grade가 2,3에 속한다면 
+  select name, grade from t_student where grade not in(1,4) // grade가 1,4에 속하지 않는다면
+  select name, grade from t_student where grade between 2 and 3 // 2와 3사이에 있다면 
+
+  -- LIKE 와 같이 쓰는 와일드 카드  % ,  _
+-- % : 글자수 제한 없고 어떤 글자가 와도 됨
+-- _ : 글자수는 한글자가 반드시 와야 되고 어떤 글자 와도 좋음
+
+--  교수님 중에서 김씨 성을 가진 교수님의 이름만 출력 (LIKE 사용)
+
+  select name from t_professor where name like '김%'
+
+  -- ORDER BY : SELECT 결과 정렬
+
+-- SELECT [컬럼명 또는 표현식] 
+-- FROM [테이블명, 뷰명]  
+-- WHERE [조건절] ;
+-- ORDER BY [정렬할 컬럼] [ASC|DESC]...  (ORDER BY 절 SELECT 의 가장 마지막)
+
+  -- 디폴트값은 asc (오름차순)
+-- 데이터에 저장된 순으로 나오지 않음 
