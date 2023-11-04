@@ -1,0 +1,44 @@
+SQL 명령문은 대소문자 가리지 않습니다
+문자열 은 ' ~ ' (홀따옴표)로 감쌈,  문자열 내의 내용은 대소문자 가림
+여러줄에 걸쳐 명령문 입력 가능
+명령문이 끝나면 반드시   ;   <- 입력
+COMMIT; 을 실행하기 전까지는 임시저장만 되는 것임,  COMMIT; 을 해야만 데이터베이스의 내용이 업데이트 됨.  (ORACLE 의 경우)
+(MySQL 의 경우 기본적으로 auto-commit 한다)
+
+커맨드 창에서 데이터베이스 접속
+mysql -u username -p 데이터베이스이름
+
+현재 접속한 사용자 확인
+select user();
+생성된 사용자 정보확인 
+select user, host from mysql.user;
+
+데이터베이스 생성
+CREATE DATABASE 데이터베이스명 
+
+데이터베이스 삭제
+DROP DATABASE IF EXISTS 데이터베이스명 
+
+IF EXIXTS => 만약 있다면 
+
+show databases; => 현재 만들어져 있는 데이터베이스 보여줌 
+
+사용자 생성
+CREATE USER  ‘[사용자아이디]’  IDENTIFIED BY ‘[암호]’
+
+비밀번호 변경
+ ALTER USER myuser IDENTIFIED BY '1111'
+
+-- 기본적으로 MySQL 은 auto-commit 이다
+-- DML 은 실행 즉시 물리적인 데이터에 반영된다.
+-- commit 을 사용하려면 auto commit 부터 비활성화 해야 한다.
+
+SELECT @@autocommit  -- 현재 auto COMMIT 활성화 여부 1: 활성화  0:비활성화
+
+SET @@autocommit = 0; -- auto COMMIT 비활성화
+-- @@는 mysql에서 사용하는 변수라고 생각하면 됨 
+
+위 쿼리에서 어떠한 것을 작성해도 autocommit이 0 즉 비활성화 되어있다면 저장안됨 
+
+-- rollback 하기 전, 마지막으로 commit 한 지점까지 복구 가능하다
+ROLLBACK;
