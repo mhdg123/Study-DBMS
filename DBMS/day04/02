@@ -1,0 +1,72 @@
+비등가 조인 (Non-Equi Join) =>이것도 inner join
+ 왼쪽테이블과 오른쪽테이블의 특정 같은 값을 걸러내는 것을 등가조인
+ 이 조인 조건이 다른경우가 비등가조인
+
+ t_customer 테이블, t_gift 테이블을 join 하여  
+ 고객의 마일리지 포인트별로 받을수 있는 상품을 조회하여 
+ 고객의 '이름(c_name)'과 포인트(c_point) 상품명(g_name)을 출력하세요
+ BETWEEN ~ AND ~ 사용
+
+select c.name , c.point, g.name from t_customer c join t_gift g on c.point between g.start and g.end;
+=> 고객의 포인트가 상품테이블의 포인트의 처음부터 끝의 값에 해당한다면 출력 
+
+ t_customer 와 t_gift 테이블 join : 
+ 자기 포인트(c_point) 보다 낮은 포인트의 상품 중 
+ 한가지를 선택할수 있다고 할때 
+ '산악용자전거'를 선택할 수 있는 
+ 고객명(c_name)과 포인트(c_point), 
+ 상품명(g_name)을 출력하세요
+
+select c.name, c.point, g.name from t_customer c join t_gift g on c.point >= g.start and g.name = '산악용자전거'
+=> on부터 조인조건인데 and다음의 조건은 일반조건이다 조인조건부터 실행하면 카티션곱으로 인해 그걸 다 실행하므로 시스템상 과부하를 줄이기
+위해 일반조건부터 실행해 조건들을 줄이고 조인조건을 실행하므로 고객의 포인트가 경품의 시작포인트보다 높으면 그에 해당하는 경품이
+다 나오지만 일반조건절부터 실행하기 때문에 산악용 자전거가 나옴 
+
+일반조건검색은 and, where다 가능함 and g.name = '산악용자전거' == where g.name ='산악용자전거'
+inner join은 where , on 다 사용가능 
+
+
+앞서본 equi join, non-equi join 은 Join 에 참여하는 모든 테이블에 데이터가 존재하는 경우에만 결과 값을 출력.
+이런 Join 을 INNER Join (이너 조인) 이라 함
+OUTER Join  이란 한쪽 테이블에 데이터가 있고 한쪽테이블에 없는 경우 데이터가 있는 쪽 테이블의 내용을 전부 출력
+필연적으로 OUTER Join 은 DB 성능에 나쁜 영향 줌.
+
+t_student 테이블과 t_professor 테이블 Join : 
+ 학생이름과 지도교수 이름을 출력하세요. 
+ 단! 지도교수가 결정되지 않은 학생의 명단도 함께 출력하세요
+
+select s.name, p,name from t_student s left outer join t_professor p on s.profono = p.profno
+=> outer는 생략 가능 (mysql한정)// 원래는 null값은 나오지 않았는데 left join하면 왼쪽 테이블의 null값도 다 출력됨 
+
+full outer join -> left join / right join 전부 출력
+오라클에선 지원하지만 mysql에선 에러 그래서 union을 써서 합집합처럼 출력
+
+select s.name, p.name from t_student s left join t_professor p on s.profno = p.profno
+union
+select s.name, p.name from t_student s right join t_professor p on s.profno = p.profno
+
+outer join은 ansi sql 구문만 가능함 
+
+ t_dept2 테이블에서 
+ 부서명 과 그 부서의 상위부서명을 출력하세요// 부서명은 같은 테이블에 존재
+
+select d1.name, d2.name from t_dept2 d1 , t_dept2 d2 where d1.pdept = d2. dcode;
+=> pedept와 dcode가 같다면 d1에 name을 나타내고 조건에 해당하는 name을 d2 name에 출력 
+
+t_professor 테이블 : 교수번호, 교수이름, 입사일, 
+ 그리고 자신보다 입사일 빠른 사람의 인원수를 출력하세요, 
+ 단 자신보다 입사일이 빠른 사람수를 오름차순으로 출력하세요
+ hint: left outer 사용 
+         / 그룹함수 사용
+
+ 자신보다 빠른 사람들의 입사일을 select
+
+select p1.profno, p1.name, p1.hiredate, p2.name, p2.hiredate from t_professor p1 left join t_prodessor p2 
+on p1.hiredate > p2.hiredate order by 3;
+=> 같은 테이블에서 비교할 2개의 별명으로 만들어놓고 조건에 해당하는 것은 p2에 출력 order by 3은 select에 있는 3번째 컬럼
+여기서 카운트함수를 사용하려면 p2 컬럼 어디다 주어도 상관없음 해당하는 조건에 맞춰서 p2컬럼의 값이 나오기 때문에 count(p2.hiredate)
+하면 p1.hiredate보다 입사일이 빠른 사람들의 명수가 세어질 것이고 count 함수를 쓰면 나머지 컬럼들은 group by로 묶어줘야함 
+그리고 left join을 쓰지 않으면 p1에서 입사일이 제일 빠른 사람은 누구와도 비교가 되지 않기 때문에 그냥 join만 쓴다면 나오지 않음 
+
+
+
