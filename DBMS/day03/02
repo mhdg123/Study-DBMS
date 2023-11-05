@@ -1,0 +1,66 @@
+ null 값과의 산술 연산 결과는 null 이다
+
+ IFNULL : NULL값을 만나면 다른 값으로 치환해서 출력하는 함수
+ ISNULL : NULL 인지 체크하는 함수  (null 이면 1, 아니면 0 리턴)
+ IF : 첫번째 인자는 '참/거짓' 판정하여 '참' 이면 두번째 값을, '거짓' 이면 세번째 값을 리턴
+      숫자타입의 경우 0 이면 '거짓', 0 이외의 수는 '참' 판정
+      null 이면 '거짓' 판정
+
+보너스가 0인데 이걸 pay와 같이 합친 결과를 보고 싶다면
+
+select bonus+pay from 테이블명 => 이렇게하면 bonus가 null이라면 pay와 합쳐진 결과도 null이 나옴
+
+select pay+ifnull(bonus,0) from 테이블명  => ifnull(bonus,0) bonus가 null이라면 0으로 치환
+select isnull(bonus) from 테이블명  => bonus가 null이라면 1을 출력 아니라면 0을 출력 
+select pay+if(bonus,bonus,0) from 테이블명  => if(bonus,bonus,0) 보너스가 null이 아니라면 보너스를 null이라면 0으로 치환 
+
+** MySQL 은 필요시 string -> number, 혹은 number -> string 으로 묵시적 형변환
+
+select 1+'1' => 이러면 2가 나옴 자바는 이럴때 11이 나옴
+select concat(1+'1') 이렇게 해야지만 11이 나옴 
+
+SELECT 1 + CAST('1' AS SIGNED);  -- 내부적으론 이와 같이 동작
+ cast -형변환함수 // 1이란 문자열을 signed타입으로 변환 
+
+ 묵시적 형변환은 편한것 같지만, 
+ 튜닝에서 뜻하지 않은 성능저하를 가져올수 있다.
+
+ 명시적 형변환 (추천)
+ CAST(expr AS type) 
+ CONVERT(expr, type)
+
+select 1 , cast(1 as char), convert(1, char) => 숫자1이 문자열로 출력
+
+-- 날짜 -> 숫자
+SELECT now(), YEAR(now()), MONTH(now()), DAY(now()), weekday(now()), HOUR(now()), MINUTE (now()), SECOND(now());
+
+now()는 현재날짜와 시간을 알려주는 함수
+year(now()) => 현재날짜의 년도를 알려줌 
+day는 0이 월요일 1이 화요일 2가 수요일 
+
+ 날짜 --> 원하는 포맷의 문자로 리턴
+ DATE_FORMAT() 함수
+
+select date_format(now(), '%y년 %m월 %d일) 
+y를 대문자로 하면 2023 , 소문자로 하면 23으로 출력 
+
+select now()+1 
+date 타입이 정수 변환한뒤 +1 산술 연산 (오라클과는 다르다!)
+오라클에서는 하루가 지난 날짜가 계산이됨 
+
+대신 mysql은 더하기, 빼기가 쉬운함수 제공함 
+ DATE_ADD(date, INTERVAL 계산수 계산형식)
+ DATE_SUB(date, INTERVAL 계산수 계산형식)
+ 계산형식이란 월,일,시간 중 어떤걸 더할꺼냐를 선택하는 것이다. 
+
+select date_add(now() interval 1 month) // 한달뒤
+select date_add(now() interval 1 day) //하루 뒤
+select date_add(now() interval -1 day) //어제
+
+날짜 차이 계산
+DATEDIFF(날짜1, 날짜2); : 일 차이
+TIMESTAMPDIFF(단위, 날짜1, 날짜2); : 연, 분기, 월, 주, 일, 시, 분, 초  .. 차이
+
+select datediff(now(), 2013-06-30) // 오늘과의 차이 계산
+
+select timestampdiff(year, 2021-11-11, now()) //차이를 년으로 계산
