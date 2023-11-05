@@ -1,0 +1,26 @@
+SELECT 결과물중 맨 위의 5개만 출력해보고 싶으면 어케 해야 하나?
+ SELECT 결과물중 n 번째 부터 m 개를 출력하고 싶다면?
+   ex) 게시판.. 페이징
+
+ DBMS 마다 구현 방법 다름
+ MYSQL : LIMIT
+ MS SQL server : TOP
+ ORACLE : ROWNUM 
+
+create table t_emp3(
+  NO int primary key Auto_increment,
+  empno int not null,
+  name varchar2(10) not null);
+
+insert into t_emp3 (empno, name) select empno, name from t_emp2;
+=> emp3에 emp2의 데이터를 넣겠다 
+
+insert into t_emp3(empno, name) select empno, name from t_emp3;
+=> emp3에 같은값을 또 집어넣음 
+
+LIMIT n : 첫 n 개
+select *from t_emp3 limit 5
+select * from t_emp3 order by no desc limit 5
+=> 뒤에서부터 5개 
+
+from은 인덱스가 0부터 시작
