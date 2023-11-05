@@ -1,0 +1,13 @@
+view?
+가상의 테이블
+실제 Table 에는 데이터가 있지만, View 에는 데이터는 없고 SQL만 저장
+View에 접근할때는 View에 들어있던 SQL의 수행된 결과를 가져오는 것
+View를 사용하는 목적
+보안 : 특정 테이블의 특정 column 이 보여지면 안되는 경우
+편의성 : 가령 여러개의 테이블 join 하는게 매번 귀찮을때 아예 그것을 view로 만들어 놓으면 편함.
+
+simple view 
+  view를 생성할 서브쿼리에 join 조건 안들어가고 1개의 테이블로 만들어지는 간단한 View.
+
+create or replace view v_prof(no, name, pay) as select profno, name, pay from t_professor;
+=> view의 컬럼명도 지정가능 / or replace는 만약 있다면 없애고 새로 만듬 
