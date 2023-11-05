@@ -1,0 +1,42 @@
+join
+하나의 테이블뿐이 아니라,  여러개의 테이블에서 정보를 가져와서 결과를 만들어 주는 기법을 Join 이라 합니다.  
+관계형 데이터베이스 (RDBMS) 의 가장 핵심 기술중 하나.
+
+ANSI join 방식이 있고, DBMS마다 특화된 방식이 있긴 하나 하나 원리를 알면 다른 방법은 손쉽게 알수 있습니다
+
+SELECT s.studno , s.name, s.deptno1 FROM t_student s;
+ 테이블에도 alias 줄수 있음 // 컬럼명에도 테이블별명 붙일수 있음
+
+   카티션곱 (cross join)
+select * from 테이블명1, 테이블명2
+  => from절에 테이블을 여러개 나열 가능한데 이 두개가 합쳐진 테이블데이터갯수가 나옴 
+select * from 테이블명1 cross join 테이블명2 
+  여기서 cross join은 생략 가능
+
+  Equi Join (등가 Join)
+일반적으로 많이 쓰이는 Join 이며, 양쪽 테이블 Join 한 카티션곱에서 ‘같은조건’이 존재할 경우만 값을 가져오는 것
+
+   t_student 테이블과 t_department 테이블을 사용하여 학생이름, 1전공 학과번호, 1전공 학과 이름을 출력하세요
+
+mysql구문
+select s.name, s.deptno1, d.dname from t_student s, t_department d where s.deptno1=d.depno; 
+=> 학생들의 전공넘버가 있고 학과에도 전공넘버가 있으므로 서로의 테이블을 조회해 같은 조건이 존재할 경우 값을 가지고옴 
+
+ansi sql구문
+select s.name, s.deptno1, d.dname from t_student s inner join t_department d on s.depno1=d.depno;
+=> where을 on으로 바꾸고 테이블 사이의 ,를 join으로 바꿈 inner는 생략가능
+
+t_student 테이블, t_professor 테이블 을 join하여 ‘학생이름’, ‘지도교수번호’, ‘지도교수이름’ 을 출력하세요
+
+  select s.name, s.profno, p.name from t_student s join t_professor p on s.profono=p.profono;
+여기서 테이블명의 alias를 쓰지 않으면 컬럼값에 같은 name이 있으므로 에러가 남 
+
+3개의 테이블 join
+t_student, t_department, t_professor 테이블 을 join 하여 학생의 이름, 학과이름, 지도교수 이름  을 출력하세요
+
+select s.name, d.dname, p.name from t_student s join t_department d on s.depno1 = d.depno
+  join t_professor p on s.profono = p.pofono;
+=> join을 두번 쓰면 됨 // 한번 먼저 조건을 실행하고 뒤에 한번 먼저 실행한 조건들과 뒤에 join절을 실행함 
+
+   
+  
