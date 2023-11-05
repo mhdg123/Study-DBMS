@@ -1,0 +1,46 @@
+단일행 함수(Single-Row Function)는 테이블 데이터에 여러개(레코드)에 ‘각각 적용’되어 산출
+그룹함수(Aggregate Function) 는 여러 개(레코드) 를 동시에 입력받아 ‘한개의 결과값’ 산출
+
+단일행함수는 문자함수, 숫자함수, 날짜함수, 변환함수, 일반함수 
+
+단일행함수 
+
+  lower() / upper() 함수
+
+  select 'Hello', lower('Hello'), upper('Hello');
+
+출력된 결과는 lower() = hello  / upper() = HELLO
+
+  length()-데이터의 길이를 출력(byte단위 갯수)
+
+  select 'hello', length('hello'), length('도레미')
+=기본적으로 utf-8로 코딩되므로 한글 한글자당 3byte 
+
+  문자열 길이를 출력하고 싶다면 char_length()
+    select char_length('한글'); -> 2나옴 
+
+**단일행함수는 WHERE 조건절에서 사용 가능
+
+*SUBSTR 함수 
+ 구문: SUBSTR( '문자열' 또는 컬럼명,   시작위치,  추출할 글자수 )
+ 문자열에서 특정 길이의 문자를 추출할 때 사용하는 함수
+ 시작위치, 음수 가능.
+ ★ 시작 인덱스가 1부터 시작한다 (인덱스는 1부터 시작)  자바는 0부터 시작함 
+
+select substr('abcde',1,2) => a,b가 출력됨 
+select substr('abcde',20,3) => 20이라는 인덱스는 존재하지 않으므로 에러가 아니고 empty가 나옴 
+select substr('abcde',-1,2) => 음수인덱스 가능 음수는 뒤에서부터 출력 즉 e,d가 출력됨 
+
+**학생 테이블에서 8월 생일인 사람만 조회(jumin컬럼이용)
+
+   select name 이름, substr(jumin,1,6) 생년월일 from t_student where substr(jumin,3,2) = '08'
+  또는 where jumin like '__08%'
+
+ INSTR()
+  주어진 문자열이나 컬럼에서 특정 글자의 위치를 찾아주는 함수 (인덱스 리턴)
+
+  select('abcde','d') // 인덱스 4출력 
+  만약에 f를 찾아달라하면 없으므로 0을 출력 자바는 -1을 리턴함 
+
+     
+    
