@@ -1,0 +1,38 @@
+ 제약조건 (Constraint)
+ 테이블 생성시 동시에 설정하기 
+
+ MySQL 에서 Table 의 제약조건 확인 
+ SELECT * FROM Information_schema.table_constraints 
+ WHERE table_schema="db이름";
+
+ SELECT * FROM Information_schema.table_constraints 
+ WHERE table_schema="db이름" AND table_name="table이름";
+
+ not null은 제약조건이 아니라 column의 속성으로 다루기 때문에 따로 정의가 안되지만 
+ 제약조건은 따로 정의 가능 primary key(컬럼명)
+
+ constraint 제약조건의 이름 
+ 이름을 만들어놓으면 나중에 에러메시지 뜰 때 확인하기 좋음 
+ primary key는 이름을 붙여도 primary로 됨 
+
+ name을 NN으로 제약조건을 주었는데 안쓰면 에러 
+ 이 때 에러메시지는 doesn't have a default value
+
+참조하고 있는 자식이 하나라도 있다면 그 데이터 삭제 불가 (fk오류)
+
+ 참조하는 부모테이블의 데이터에
+ ON DELETE [reference_option]
+ 
+ 1. RESTRICT : (디폴트) 개체를 변경/삭제할 때 다른 개체가 변경/삭제할 개체를 
+ 참조하고 있을 경우 변경/삭제가 취소됩니다.(제한)
+
+ 2. CASCADE : 개체를 변경/삭제할 때 다른 개체가 변경/삭제할 개체를 참조하고 있을 경우
+ 함께 변경/삭제됩니다.
+
+ 3. NO ACTION : MYSQL에서는 RESTRICT와 동일합니다.
+
+ 4. SET NULL : 개체를 변경/삭제할 때 다른 개체가 변경/삭제할 개체를 
+ 참조하고 있을 경우 참조하고 있는 값은 NULL로 세팅됩니다.
+
+primary key(컬럼명, 컬럼명)
+=> 두 개의 컬럼명의 조합이 primary key가 됨 
